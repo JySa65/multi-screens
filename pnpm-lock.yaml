@@ -21,6 +21,9 @@ devDependencies:
   '@electron/notarize':
     specifier: 1.2.3
     version: 1.2.3
+  '@types/better-sqlite3':
+    specifier: 7.6.4
+    version: 7.6.4
   '@types/node':
     specifier: 16.18.21
     version: 16.18.21
@@ -745,6 +748,12 @@ packages:
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
+    dev: true
+
+  /@types/better-sqlite3@7.6.4:
+    resolution: {integrity: sha512-dzrRZCYPXIXfSR1/surNbJ/grU3scTaygS0OMzjlGf71i9sc2fGyHPXXiXmEvNIoE0cGwsanEFMVJxPXmco9Eg==}
+    dependencies:
+      '@types/node': 16.18.21
     dev: true
 
   /@types/cacheable-request@6.0.3:

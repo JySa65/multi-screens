@@ -1,9 +1,13 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import { Devices } from '../models'
+
 // Custom APIs for renderer
 const api = {
-  getDevices: Devices.getDevices
+  getDevices: Devices.getDevices,
+  createDevice: Devices.createDevice,
+  updateDevice: Devices.updateDevice,
+  deleteDevice: Devices.deleteDevice
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

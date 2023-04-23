@@ -1,23 +1,29 @@
-import { app, shell, BrowserWindow } from 'electron'
-import { join } from 'path'
+import os from 'os'
+import { app, shell, BrowserWindow, session } from 'electron'
+import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import db from '../models/database'
 
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
+    title: 'Multi Screens',
+    titleBarStyle: 'default',
     show: false,
+    maximizable: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false,
       webviewTag: true,
-      nodeIntegration: true
+      nodeIntegration: true,
+      devTools: is.dev
     }
   })
+  mainWindow.maximize()
+  mainWindow.show()
 
   mainWindow.on('ready-to-show', () => {
     mainWindow.show()
@@ -40,7 +46,14 @@ function createWindow(): void {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
+  if (is.dev) {
+    const reactDevToolsPath = path.join(
+      os.homedir(),
+      '/Library/Application Support/BraveSoftware/Brave-Browser/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_8/'
+    )
+    await session.defaultSession.loadExtension(reactDevToolsPath)
+  }
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.jysa')
 
@@ -64,6 +77,7 @@ app.whenReady().then(() => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
+  db.close()
   if (process.platform !== 'darwin') {
     app.quit()
   }
