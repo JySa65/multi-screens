@@ -1,5 +1,5 @@
 import os from 'os'
-import { app, shell, BrowserWindow, session } from 'electron'
+import { app, shell, BrowserWindow, session, Menu } from 'electron'
 import path, { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
@@ -13,13 +13,15 @@ function createWindow(): void {
     show: false,
     maximizable: false,
     autoHideMenuBar: true,
+
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
-      sandbox: false,
+      // sandbox: true,
       webviewTag: true,
       nodeIntegration: true,
-      devTools: is.dev
+      devTools: is.dev,
+      spellcheck: false
     }
   })
   mainWindow.maximize()
@@ -50,7 +52,7 @@ app.whenReady().then(async () => {
   if (is.dev) {
     const reactDevToolsPath = path.join(
       os.homedir(),
-      '/Library/Application Support/BraveSoftware/Brave-Browser/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_8/'
+      '/Library/Application Support/BraveSoftware/Brave-Browser/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_0/'
     )
     await session.defaultSession.loadExtension(reactDevToolsPath)
   }

@@ -1,4 +1,4 @@
-appId: com.electron.app
+appId: com.jysa65.app
 productName: multi-screens
 directories:
   buildResources: build
