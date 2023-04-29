@@ -5,6 +5,9 @@ declare global {
   interface Window {
     electron: ElectronAPI
     api: {
+      devices: {
+        get: () => Devices[]
+      }
       getDevices(): Devices[]
       createDevice(device: IDevice): Devices[]
       updateDevice(device: IDevice): Devices[]

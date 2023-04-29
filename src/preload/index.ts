@@ -5,6 +5,10 @@ import { Devices } from '../models'
 
 // Custom APIs for renderer
 const api = {
+  devices: {
+    get: Devices.getDevices
+    // create:
+  },
   getDevices: Devices.getDevices,
   createDevice: Devices.createDevice,
   updateDevice: Devices.updateDevice,

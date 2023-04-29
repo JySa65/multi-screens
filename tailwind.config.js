@@ -9,7 +9,8 @@ module.exports = {
       colors: {
         ...defaultTheme.colors,
         'multi-screen': {
-          primary: '#2f3241'
+          primary: '#2f3241',
+          seconday: '#18191c'
         }
       },
       fontFamily: {

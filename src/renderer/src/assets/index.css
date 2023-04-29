@@ -18,11 +18,6 @@
 @layer base {
   body,
   html {
-    @apply bg-multi-screen-primary;
+    @apply bg-multi-screen-seconday;
   }
-}
-
-.aaa:focus,
-.aaa:not(:placeholder-shown) + .bbb {
-  display: block;
 }

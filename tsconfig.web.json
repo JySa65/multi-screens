@@ -5,7 +5,8 @@
     "src/renderer/src/**/*",
     "src/renderer/src/**/*.tsx",
     "src/preload/*.d.ts",
-    "src/models/**/*"
+    "src/models/**/*",
+    "src/utils/**/*"
   ],
   "compilerOptions": {
     "composite": true,
@@ -15,6 +16,24 @@
     "paths": {
       "@renderer/*": [
         "src/renderer/src/*"
+      ],
+      "@Atoms/*": [
+        "src/renderer/src/components/Atoms/*"
+      ],
+      "@Molecules/*": [
+        "src/renderer/src/components/Molecules/*"
+      ],
+      "@Pages/*": [
+        "src/renderer/src/components/Pages/*"
+      ],
+      "@Layouts/*": [
+        "src/renderer/src/components/Layouts/*"
+      ],
+      "@Store/*": [
+        "src/renderer/src/store/*"
+      ],
+      "@Utils/*": [
+        "src/renderer/src/utils/*"
       ]
     }
   }
