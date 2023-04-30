@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef } from 'react'
+import { ForwardedRef, ReactElement, forwardRef } from 'react'
 
 interface IWebview {
   url: string
@@ -10,7 +10,7 @@ interface IWebview {
 const Webview = forwardRef(function Webview(
   { url, width, height, ...rest }: IWebview,
   ref: ForwardedRef<HTMLWebViewElement | null>
-): JSX.Element {
+): ReactElement<HTMLWebViewElement> {
   return <webview src={url} style={{ height, width }} ref={ref} {...rest} />
 })
 

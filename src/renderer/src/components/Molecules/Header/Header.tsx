@@ -3,52 +3,62 @@ import PubSub from 'pubsub-js'
 import { Button, IconButton, Icons, Input } from '@Atoms/index'
 
 import useBoundStore from '@renderer/store'
-import { HOME } from '@Utils/pubsub'
+import { GO_BACK, GO_FORWARD, HOME, INPUT_SEARCH_VALUE } from '@Utils/pubsub'
 
 const placeholder = 'https://github.com/jysa65'
 
 const Header = (): JSX.Element => {
   const inputURLValue = useBoundStore((state) => state.inputURLValue)
-  const { setInputURLValue } = useBoundStore()
-  const [value, setValue] = useState(inputURLValue)
+  const { setInputURLValue, setAddressURL } = useBoundStore()
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>): void => {
-    setValue(e.target.value)
+    setInputURLValue(e.target.value)
   }
 
   const handleOnSubmit = (e: SyntheticEvent): void => {
     e.preventDefault()
-    let url = value
-    console.log(url.replace('/', ''))
-
-    if (!value.includes('http')) {
-      url = `https://${value}`
+    let url = inputURLValue
+    if (url === '') {
+      return
     }
+
+    if (!inputURLValue.includes('http')) {
+      url = `https://${inputURLValue}`
+    }
+    PubSub.publish(INPUT_SEARCH_VALUE, url)
     setInputURLValue(url)
+    setAddressURL(url)
   }
 
   const handleClear = (): void => {
-    setValue('')
+    setInputURLValue('')
   }
-
-  useEffect(() => {
-    setValue(inputURLValue)
-  }, [inputURLValue])
 
   return (
     <nav
       className={
-        'top-0 bg-multi-screen-primary shadow fixed w-full px-7 py-2 flex justify-between items-center'
+        'top-0 z-10 bg-multi-screen-primary shadow fixed w-full px-7 py-2 flex justify-between items-center'
       }
       role="navigation"
     >
-      <IconButton icon={<Icons.ArrowBack size={15} />} onClick={console.log} />
-      <IconButton className="ml-5" icon={<Icons.ArrowUp size={15} />} onClick={console.log} />
+      <IconButton
+        icon={<Icons.ArrowBack size={15} />}
+        onClick={(): void => {
+          PubSub.publish(GO_BACK)
+        }}
+      />
+      <IconButton
+        className="ml-5"
+        icon={<Icons.ArrowUp size={15} />}
+        onClick={(): void => {
+          PubSub.publish(GO_FORWARD)
+        }}
+      />
       <IconButton
         className="mx-5"
         icon={<Icons.Home size={17} />}
         onClick={(): void => {
-          PubSub.publish(HOME, true)
+          PubSub.publish(HOME)
         }}
       />
 
@@ -67,7 +77,7 @@ const Header = (): JSX.Element => {
           className="pr-[6.7rem]"
           placeholder={placeholder}
           onChange={handleChangeInput}
-          value={value}
+          value={inputURLValue}
           onClear={handleClear}
         />
         <Button

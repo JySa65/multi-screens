@@ -23,6 +23,9 @@
       "@Molecules/*": [
         "src/renderer/src/components/Molecules/*"
       ],
+      "@Organisms/*": [
+        "src/renderer/src/components/Organisms/*"
+      ],
       "@Pages/*": [
         "src/renderer/src/components/Pages/*"
       ],
