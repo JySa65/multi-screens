@@ -1,15 +1,20 @@
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
+import { ChangeEvent, SyntheticEvent, useState } from 'react'
 import PubSub from 'pubsub-js'
 import { Button, IconButton, Icons, Input } from '@Atoms/index'
 
 import useBoundStore from '@renderer/store'
-import { GO_BACK, GO_FORWARD, HOME, INPUT_SEARCH_VALUE } from '@Utils/pubsub'
+import { NavigationOptions } from '@Utils/pubsub'
 
 const placeholder = 'https://github.com/jysa65'
 
 const Header = (): JSX.Element => {
   const inputURLValue = useBoundStore((state) => state.inputURLValue)
-  const { setInputURLValue, setAddressURL } = useBoundStore()
+  const zoomFactorValues = useBoundStore((state) => state.zoomFactorValues)
+  const zoomFactor = useBoundStore((state) => state.zoomFactor)
+
+  const { setInputURLValue, setAddressURL, setChangeZoomFactor, setRotate } =
+    useBoundStore.getState()
+  const [showElement, setShowElement] = useState(false)
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>): void => {
     setInputURLValue(e.target.value)
@@ -25,13 +30,26 @@ const Header = (): JSX.Element => {
     if (!inputURLValue.includes('http')) {
       url = `https://${inputURLValue}`
     }
-    PubSub.publish(INPUT_SEARCH_VALUE, url)
     setInputURLValue(url)
     setAddressURL(url)
   }
 
   const handleClear = (): void => {
     setInputURLValue('')
+  }
+
+  const zoomIn = (): void => {
+    const index = zoomFactorValues.findIndex((value) => value === zoomFactor)
+    if (zoomFactorValues.length - 1 > index) {
+      setChangeZoomFactor(zoomFactorValues[index + 1])
+    }
+  }
+
+  const zoomOut = (): void => {
+    const index = zoomFactorValues.findIndex((value) => value === zoomFactor)
+    if (index >= 1) {
+      setChangeZoomFactor(zoomFactorValues[index - 1])
+    }
   }
 
   return (
@@ -44,21 +62,21 @@ const Header = (): JSX.Element => {
       <IconButton
         icon={<Icons.ArrowBack size={15} />}
         onClick={(): void => {
-          PubSub.publish(GO_BACK)
+          PubSub.publish(NavigationOptions.GO_BACK)
         }}
       />
       <IconButton
         className="ml-5"
         icon={<Icons.ArrowUp size={15} />}
         onClick={(): void => {
-          PubSub.publish(GO_FORWARD)
+          PubSub.publish(NavigationOptions.GO_FORWARD)
         }}
       />
       <IconButton
         className="mx-5"
         icon={<Icons.Home size={17} />}
         onClick={(): void => {
-          PubSub.publish(HOME)
+          PubSub.publish(NavigationOptions.HOME)
         }}
       />
 
@@ -88,10 +106,32 @@ const Header = (): JSX.Element => {
       </form>
       <IconButton
         icon={<Icons.MobileRotatate size={18} className="fill-white" />}
-        onClick={console.log}
+        onClick={setRotate}
         className="mx-5"
       />
-      <IconButton icon={<Icons.ZoomIn size={18} className="fill-white" />} onClick={console.log} />
+      <div className="relative grid place-items-center group/show">
+        <IconButton
+          icon={<Icons.ZoomIn size={18} className="fill-white" />}
+          onClick={(): void => setShowElement((prev) => !prev)}
+        />
+
+        {showElement && (
+          <div className="absolute flex bg-gray-700 border border-gray-500 top-6 -right-[19px] items-center p-1.5 rounded-full divide-x ">
+            <IconButton
+              icon={<Icons.ZoomIn size={18} className="fill-white" />}
+              onClick={zoomIn}
+              className="px-1.5"
+            />
+
+            <p className="text-white text-[0.65rem] px-2">{zoomFactor * 100}%</p>
+            <IconButton
+              icon={<Icons.ZoomOut size={18} className="fill-transparent" />}
+              onClick={zoomOut}
+              className="px-1.5"
+            />
+          </div>
+        )}
+      </div>
     </nav>
   )
 }

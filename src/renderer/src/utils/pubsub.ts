@@ -1,4 +1,5 @@
-export const HOME = Symbol('HOME')
-export const GO_BACK = Symbol('GO_BACK')
-export const GO_FORWARD = Symbol('CAN_GO_FORWARD')
-export const INPUT_SEARCH_VALUE = Symbol('INPUT_SEARCH_VALUE')
+export enum NavigationOptions {
+  HOME = 'HOME',
+  GO_BACK = 'GO_BACK',
+  GO_FORWARD = 'GO_FORWARD'
+}

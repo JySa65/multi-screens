@@ -1,9 +1,8 @@
-import os from 'os'
-import { app, shell, BrowserWindow, session, Menu } from 'electron'
-import path, { join } from 'path'
+import { app, shell, BrowserWindow } from 'electron'
+import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
-import db from '../models/database'
+import DB from '../models/database'
 
 function createWindow(): void {
   // Create the browser window.
@@ -49,12 +48,14 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(async () => {
+  DB.instance.execInitMigration()
+
   if (is.dev) {
-    const reactDevToolsPath = path.join(
-      os.homedir(),
-      '/Library/Application Support/BraveSoftware/Brave-Browser/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_0/'
-    )
-    await session.defaultSession.loadExtension(reactDevToolsPath)
+    // const reactDevToolsPath = path.join(
+    //   os.homedir(),
+    //   '/Library/Application Support/BraveSoftware/Brave-Browser/Default/Extensions/fmkadmapgofadopljbjfkapdkoienihi/4.27.3_0/'
+    // )
+    // await session.defaultSession.loadExtension(reactDevToolsPath)
   }
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.jysa')
@@ -79,7 +80,7 @@ app.whenReady().then(async () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  db.close()
+  DB.instance.close()
   if (process.platform !== 'darwin') {
     app.quit()
   }

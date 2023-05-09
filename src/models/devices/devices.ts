@@ -1,4 +1,4 @@
-import db from '../database'
+import DB from '../database'
 import { getErrorMessage, staticImplements } from '../../utils'
 
 export interface IDevice {
@@ -44,7 +44,7 @@ export default class Devices implements IDevice {
   public static getDevices(): Devices[] {
     try {
       const sql = 'SELECT * FROM devices'
-      const data = <Devices[]>db.prepare<Devices[]>(sql).all()
+      const data = <Devices[]>DB.instance.prepare(sql).all()
       return data
     } catch (error) {
       alert(`No se pudieron obtener los dispositivos: ${getErrorMessage(error)}`)
@@ -55,7 +55,7 @@ export default class Devices implements IDevice {
   public static createDevice(device: IDevice): Devices[] {
     try {
       const sql = `INSERT INTO ${Devices.table} (name, width, height) VALUES (LOWER(@name),@width,@height)`
-      const result = db.prepare(sql).run(device)
+      const result = DB.instance.prepare(sql).run(device)
       if (result.changes === 0) {
         alert('No se pudo registrar')
       }
@@ -69,7 +69,7 @@ export default class Devices implements IDevice {
   public static updateDevice(device: IDevice): Devices[] {
     try {
       const sql = `UPDATE ${Devices.table} SET name=LOWER(@name), width=@width, height=@height WHERE id=@id`
-      const result = db.prepare(sql).run(device)
+      const result = DB.instance.prepare(sql).run(device)
       if (result.changes === 0) {
         alert('No se pudo actualizar, verifica el ID')
       }
@@ -82,7 +82,7 @@ export default class Devices implements IDevice {
   public static deleteDevice(deviceId: IDevice['id']): Devices[] {
     try {
       const sql = `DELETE FROM ${Devices.table} WHERE id=?`
-      const result = db.prepare(sql).run(deviceId)
+      const result = DB.instance.prepare(sql).run(deviceId)
       if (result.changes === 0) {
         alert('No se pudo eliminar, verifica el ID')
       }

@@ -1,4 +1,4 @@
-import { StrictMode } from 'react'
+// import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './assets/fonts/inter.css'
 import './assets/index.css'
@@ -6,9 +6,9 @@ import App from './App'
 
 const RootApp = (): JSX.Element => {
   return (
-    <StrictMode>
-      <App />
-    </StrictMode>
+    // <StrictMode >
+    <App />
+    // </StrictMode>
   )
 }
 
