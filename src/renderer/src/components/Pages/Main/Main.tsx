@@ -17,7 +17,7 @@ const Main = (): JSX.Element => {
   return (
     <MainLayout>
       <div
-        className="mx-5 mt-20 origin-top-left flex gap-x-5 duration-500 ease-in transition-all"
+        className="mx-5 mt-20 origin-top-left flex gap-x-5 duration-300 ease-in transition-all"
         style={{
           transform: `scale(${zoomFactor})`
         }}

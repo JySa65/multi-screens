@@ -4,6 +4,8 @@ import { Button, IconButton, Icons, Input } from '@Atoms/index'
 
 import useBoundStore from '@renderer/store'
 import { NavigationOptions } from '@Utils/pubsub'
+import { defaultURL } from '@Store/index'
+import regExp from '@Utils/regExp'
 
 const placeholder = 'https://github.com/jysa65'
 
@@ -27,9 +29,18 @@ const Header = (): JSX.Element => {
       return
     }
 
-    if (!inputURLValue.includes('http')) {
-      url = `https://${inputURLValue}`
+    if (regExp.addressUrl(url)) {
+      if (!url.includes('http')) {
+        url = `https://${url}`
+      }
+    } else if (regExp.localAddressUrl(url)) {
+      if (!url.includes('http')) {
+        url = `http://${url}`
+      }
+    } else {
+      url = `${defaultURL}search?q=${url}`
     }
+
     setInputURLValue(url)
     setAddressURL(url)
   }
@@ -118,15 +129,14 @@ const Header = (): JSX.Element => {
         {showElement && (
           <div className="absolute flex bg-gray-700 border border-gray-500 top-6 -right-[19px] items-center p-1.5 rounded-full divide-x ">
             <IconButton
-              icon={<Icons.ZoomIn size={18} className="fill-white" />}
-              onClick={zoomIn}
-              className="px-1.5"
-            />
-
-            <p className="text-white text-[0.65rem] px-2">{zoomFactor * 100}%</p>
-            <IconButton
               icon={<Icons.ZoomOut size={18} className="fill-transparent" />}
               onClick={zoomOut}
+              className="px-1.5"
+            />
+            <p className="text-white text-[0.65rem] px-2">{zoomFactor * 100}%</p>
+            <IconButton
+              icon={<Icons.ZoomIn size={18} className="fill-white" />}
+              onClick={zoomIn}
               className="px-1.5"
             />
           </div>

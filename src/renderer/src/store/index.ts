@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 
-const defaultURL = 'https://www.bing.com/'
+export const defaultURL = 'https://www.bing.com/'
 
 type Func<T> = (value: T) => void
 
