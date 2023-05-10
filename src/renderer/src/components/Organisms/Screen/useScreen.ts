@@ -22,18 +22,32 @@ export default function useScreen(isMain: boolean): IUseScreen {
   const setInputURLValue = useBoundStore((state) => state.setInputURLValue)
 
   const didNavigateInPageEvent = (e: Electron.DidNavigateInPageEvent): void => {
+    if (e.url.includes('#')) {
+      return
+    }
+
+    if (e.url === addressUrl) {
+      return
+    }
+
+    if (isNavigating) {
+      return
+    }
+
+    setIsNavigating(true)
     if (isMain) {
       setInputURLValue(e.url)
     }
+    setAddressURL(e.url)
   }
-  const didNavigate = (e: Electron.WillNavigateEvent): void => {
-    if (!isNavigating) {
-      setIsNavigating(true)
-      if (isMain) {
-        setInputURLValue(e.url)
-      }
-      setAddressURL(e.url)
+  const willNavigate = (e: Electron.WillNavigateEvent): void => {
+    if (isNavigating) {
+      return
     }
+    if (isMain) {
+      setInputURLValue(e.url)
+    }
+    setAddressURL(e.url)
   }
 
   const didStartLoading = (): void => {
@@ -49,14 +63,14 @@ export default function useScreen(isMain: boolean): IUseScreen {
     if (webviewRef.current) {
       webviewRef.current?.addEventListener('did-start-loading', didStartLoading)
       webviewRef.current?.addEventListener('did-stop-loading', didStopLoading)
-      webviewRef.current?.addEventListener('will-navigate', didNavigate)
+      webviewRef.current?.addEventListener('will-navigate', willNavigate)
       webviewRef.current?.addEventListener('did-navigate-in-page', didNavigateInPageEvent)
     }
     return () => {
       if (webviewRef.current) {
         webviewRef.current?.removeEventListener('did-start-loading', didStartLoading)
         webviewRef.current?.removeEventListener('did-stop-loading', didStopLoading)
-        webviewRef.current?.removeEventListener('did-navigate', didNavigate)
+        webviewRef.current?.removeEventListener('will-navigate', willNavigate)
         webviewRef.current?.removeEventListener('did-navigate-in-page', didNavigateInPageEvent)
       }
     }

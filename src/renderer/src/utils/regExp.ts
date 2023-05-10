@@ -6,7 +6,8 @@ export default {
     return re.test(text)
   },
   localAddressUrl: (text: string): boolean => {
-    const regex = /^((http):\/\/)?(localhost|127(?:\.\d{1,3}){0,2})(?::\d{1,9})?\/?$/
+    // eslint-disable-next-line no-useless-escape
+    const regex = /^((http):\/\/)?(localhost|127(?:\.\d{1,3}){0,2})(?::\d{1,5})?(\/[\w\/]*)?$/
     const re = new RegExp(regex)
     return re.test(text)
   }
