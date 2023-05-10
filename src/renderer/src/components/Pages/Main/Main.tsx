@@ -1,9 +1,18 @@
 import { Screen } from '@Organisms/index'
 import { MainLayout } from '@Layouts/index'
 import useBoundStore from '@renderer/store'
+import { useLayoutEffect, useState } from 'react'
+import type { IDevice } from 'src/main/models/devices/devices'
 
 const Main = (): JSX.Element => {
   const zoomFactor = useBoundStore((state) => state.zoomFactor)
+  const [devices, setDevices] = useState<IDevice[]>([])
+
+  useLayoutEffect(() => {
+    window.electron.ipcRenderer.invoke('get-devices').then((devices) => {
+      setDevices(devices)
+    })
+  }, [])
 
   return (
     <MainLayout>
@@ -13,7 +22,7 @@ const Main = (): JSX.Element => {
           transform: `scale(${zoomFactor})`
         }}
       >
-        {window.api.devices.get().map((device, index) => (
+        {devices.map((device, index) => (
           <Screen key={device.name} device={device} isMain={index === 0} />
         ))}
       </div>

@@ -1,5 +1,5 @@
 import { ElectronAPI } from '@electron-toolkit/preload'
-import Devices, { IDevice } from '../models/devices/devices'
+import Devices, { IDevice } from '../main/models/devices/devices'
 
 declare global {
   interface Window {

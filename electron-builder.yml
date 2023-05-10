@@ -1,5 +1,5 @@
 appId: com.jysa65.app
-productName: multi-screens
+productName: Multi Screens
 directories:
   buildResources: build
 files:

@@ -1,5 +1,5 @@
 import DB from '../database'
-import { getErrorMessage, staticImplements } from '../../utils'
+import { getErrorMessage, staticImplements } from '../../../utils'
 
 export interface IDevice {
   name: string

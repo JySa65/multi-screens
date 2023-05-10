@@ -1,19 +1,8 @@
 import { contextBridge } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-import { Devices } from '../models'
-
 // Custom APIs for renderer
-const api = {
-  devices: {
-    get: Devices.getDevices
-    // create:
-  },
-  getDevices: Devices.getDevices,
-  createDevice: Devices.createDevice,
-  updateDevice: Devices.updateDevice,
-  deleteDevice: Devices.deleteDevice
-}
+const api = {}
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

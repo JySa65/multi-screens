@@ -1,14 +1,27 @@
 import fs from 'fs'
 import Database from 'better-sqlite3'
 import type { Database as IDataBase, Statement } from 'better-sqlite3'
+import { app } from 'electron'
+import { resolve } from 'path'
 
 class DB {
   private db: IDataBase
   public static instance: DB = new DB()
 
   constructor() {
+    // this.db = new Database('./db.db')
+    // console.log(app.getPath('userData'))
+    // // console.log(app.getPath('userData'))
+    // // app?.whenReady().then(async () => {
+    const dir = app.getPath('userData')
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, '0777')
+    }
+    console.log(dir)
+    this.db = new Database(`${dir}/db.db`)
+    // this.execInitMigration()
+    // })
     // this.db = new Database('./db.db', { verbose: console.log })
-    this.db = new Database('./db.db')
   }
 
   public exec(sql: string): void {
@@ -28,7 +41,8 @@ class DB {
   }
 
   public execInitMigration(): void {
-    const migration = fs.readFileSync('./migrate-schema.sql', 'utf8')
+    const dir = resolve(__dirname, '..', '..', 'resources', 'migrate-schema.sql')
+    const migration = fs.readFileSync(dir, 'utf8')
     this.db.exec(migration)
   }
 }
